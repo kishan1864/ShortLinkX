@@ -1,0 +1,2 @@
+import {ArrowUpRight} from "lucide-react";import Card from "../common/Card";import "./StatCard.css";
+export default function StatCard({title,value,change,icon:Icon}){return <Card className="stat-card hoverable"><div className="stat-top"><div className="stat-icon"><Icon size={20}/></div><span className="change">↗ {change}</span></div><div className="stat-value">{value}</div><div className="stat-title">{title}</div></Card>}

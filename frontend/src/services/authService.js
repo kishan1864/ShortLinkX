@@ -1,0 +1,1 @@
+import api from "./api";export const authService={login:async p=>(await api.post("/api/auth/login",p)).data,register:async p=>(await api.post("/api/auth/register",p)).data,me:async()=>(await api.get("/api/users/me")).data};

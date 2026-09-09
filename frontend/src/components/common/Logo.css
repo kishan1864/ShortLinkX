@@ -1,0 +1,1 @@
+.brand-logo{display:flex;align-items:center;gap:10px;color:var(--heading);font-weight:850;font-size:19px;letter-spacing:-.04em}.brand-logo>span:last-child span{color:var(--purple)}.brand-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:white;background:var(--gradient-primary);box-shadow:0 8px 22px rgba(124,58,237,.25)}

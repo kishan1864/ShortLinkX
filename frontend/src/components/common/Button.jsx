@@ -1,0 +1,2 @@
+import {Loader2} from "lucide-react";import "./Button.css";
+export default function Button({children,type="button",onClick,variant="primary",disabled=false,loading=false,fullWidth=false,icon}){return <button type={type} onClick={onClick} disabled={disabled||loading} className={`modern-button button-${variant} button-press ${fullWidth?"button-full":""}`}>{loading?<Loader2 size={17} className="spin"/>:icon}{children}</button>}

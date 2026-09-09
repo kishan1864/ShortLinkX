@@ -1,0 +1,2 @@
+import "./AnimatedBackground.css";
+export default function AnimatedBackground(){return <div className="background-container"><div className="gradient-blob blob-one"/><div className="gradient-blob blob-two"/><div className="gradient-blob blob-three"/><div className="background-grid"/></div>}

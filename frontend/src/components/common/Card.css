@@ -1,0 +1,1 @@
+.modern-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:var(--shadow-card);transition:transform .3s,box-shadow .3s,border-color .3s}.modern-card.hoverable:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:rgba(124,58,237,.28)}

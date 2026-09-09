@@ -1,0 +1,1 @@
+.app-layout{min-height:100vh;display:flex}.main-area{min-width:0;flex:1;margin-left:var(--sidebar-open);transition:margin-left .3s}@media(max-width:950px){.main-area{margin-left:0}}

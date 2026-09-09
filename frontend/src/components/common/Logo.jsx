@@ -1,0 +1,2 @@
+import {Link} from "react-router-dom";import {Link2} from "lucide-react";import "./Logo.css";
+export default function Logo({compact=false}){return <Link to="/dashboard" className="brand-logo"><span className="brand-mark"><Link2 size={21}/></span>{!compact&&<span>Short<span>Link</span>X</span>}</Link>}

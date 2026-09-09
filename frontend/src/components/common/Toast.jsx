@@ -1,0 +1,2 @@
+import {CheckCircle2,XCircle,Info,X} from "lucide-react";import "./Toast.css";const icons={success:<CheckCircle2/>,error:<XCircle/>,info:<Info/>};
+export default function Toast({message,type="success",onClose}){return <div className={`toast toast-${type}`}><span className="toast-icon">{icons[type]}</span><span className="toast-message">{message}</span><button className="toast-close" onClick={onClose}><X size={17}/></button></div>}

@@ -1,0 +1,1 @@
+import api from "./api";export const urlService={create:async originalUrl=>(await api.post("/api/urls",{originalUrl})).data};
