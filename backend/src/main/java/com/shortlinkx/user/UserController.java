@@ -1,5 +1,8 @@
 package com.shortlinkx.user;
 
+
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -7,12 +10,32 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 public class UserController {
 
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @GetMapping("/me")
-    public String getCurrentUser(
+    public ResponseEntity<UserProfileResponse> getCurrentUser(
             Authentication authentication
     ) {
 
-        return "Authenticated user: "
-                + authentication.getName();
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found")
+                );
+
+        UserProfileResponse response =
+                new UserProfileResponse(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole()
+                );
+
+        return ResponseEntity.ok(response);
     }
 }

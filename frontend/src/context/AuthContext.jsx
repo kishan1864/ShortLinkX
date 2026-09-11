@@ -1,8 +1,10 @@
 import { createContext, useContext, useState } from "react";
+import { authService } from "../services/authService";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
+
     const [token, setToken] = useState(
         () => localStorage.getItem("shortlinkx_token")
     );
@@ -17,28 +19,54 @@ export function AuthProvider({ children }) {
         }
     });
 
-    const login = (data) => {
+    const login = async (data) => {
+
         const accessToken = data.accessToken;
 
+        // Save JWT
         localStorage.setItem(
             "shortlinkx_token",
             accessToken
         );
 
-        if (data.user) {
+        setToken(accessToken);
+
+        try {
+            // Get authenticated user's actual profile
+            const currentUser =
+                await authService.me();
+
             localStorage.setItem(
                 "shortlinkx_user",
-                JSON.stringify(data.user)
+                JSON.stringify(currentUser)
             );
-        }
 
-        setToken(accessToken);
-        setUser(data.user || null);
+            setUser(currentUser);
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load current user:",
+                error
+            );
+
+            localStorage.removeItem(
+                "shortlinkx_user"
+            );
+
+            setUser(null);
+        }
     };
 
     const logout = () => {
-        localStorage.removeItem("shortlinkx_token");
-        localStorage.removeItem("shortlinkx_user");
+
+        localStorage.removeItem(
+            "shortlinkx_token"
+        );
+
+        localStorage.removeItem(
+            "shortlinkx_user"
+        );
 
         setToken(null);
         setUser(null);
