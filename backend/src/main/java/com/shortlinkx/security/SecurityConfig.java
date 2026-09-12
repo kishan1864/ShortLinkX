@@ -59,12 +59,16 @@ public class SecurityConfig {
 
         http
                 // Enable CORS
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors ->
+                        cors.configurationSource(
+                                corsConfigurationSource()
+                        )
+                )
 
-                // We are using JWT, so CSRF is disabled
+                // JWT based authentication
                 .csrf(csrf -> csrf.disable())
 
-                // No HTTP session
+                // Stateless authentication
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(
                                 SessionCreationPolicy.STATELESS
@@ -74,7 +78,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         // Allow CORS preflight requests
-                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                        .requestMatchers(
+                                HttpMethod.OPTIONS,
+                                "/**"
+                        )
                         .permitAll()
 
                         // Public authentication APIs
@@ -97,7 +104,9 @@ public class SecurityConfig {
                         .authenticated()
                 )
 
-                .authenticationProvider(authenticationProvider())
+                .authenticationProvider(
+                        authenticationProvider()
+                )
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
@@ -113,10 +122,15 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
+        // Allowed frontend origins
         configuration.setAllowedOrigins(
-                List.of("http://localhost:5173")
+                List.of(
+                        "http://localhost:5173",
+                        "https://shortlinkx-frontend-gewj.onrender.com"
+                )
         );
 
+        // Allowed HTTP methods
         configuration.setAllowedMethods(
                 List.of(
                         "GET",
@@ -128,6 +142,7 @@ public class SecurityConfig {
                 )
         );
 
+        // Allowed request headers
         configuration.setAllowedHeaders(
                 List.of(
                         "Authorization",
@@ -135,6 +150,7 @@ public class SecurityConfig {
                 )
         );
 
+        // Allow credentials
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source =
