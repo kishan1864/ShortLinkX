@@ -6,6 +6,7 @@ import com.shortlinkx.entity.Url;
 import com.shortlinkx.repository.UrlRepository;
 import com.shortlinkx.util.ShortCodeGenerator;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +14,9 @@ public class UrlService {
 
     private final UrlRepository urlRepository;
     private final ShortCodeGenerator shortCodeGenerator;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     public UrlService(
             UrlRepository urlRepository,
@@ -44,7 +48,7 @@ public class UrlService {
 
         // 5. Build the short URL
         String shortUrl =
-                "http://localhost:8080/" + shortCode;
+                baseUrl + "/" + shortCode;
 
         // 6. Return response
         return new ShortUrlResponse(
