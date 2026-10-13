@@ -5,7 +5,8 @@ import {
   Link2,
   Copy,
   Check,
-  ExternalLink
+  ExternalLink,
+  Trash2
 } from "lucide-react";
 
 import Card from "../components/common/Card";
@@ -18,31 +19,39 @@ export default function UrlHistory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [copiedId, setCopiedId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
-    const loadHistory = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const response = await api.get("/api/urls/history");
-
-        setUrls(response.data);
-      } catch (err) {
-        console.error("Failed to load URL history:", err);
-
-        if (err.response?.status === 401 || err.response?.status === 403) {
-          setError("Your session has expired. Please login again.");
-        } else {
-          setError("Unable to load your URL history.");
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadHistory();
   }, []);
+
+  const loadHistory = async () => {
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await api.get("/api/urls/history");
+
+      setUrls(response.data || []);
+    } catch (err) {
+      console.error("Failed to load URL history:", err);
+
+      if (
+        err.response?.status === 401 ||
+        err.response?.status === 403
+      ) {
+        setError(
+          "Your session has expired. Please login again."
+        );
+      } else {
+        setError(
+          "Unable to load your URL history."
+        );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredUrls = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -85,12 +94,57 @@ export default function UrlHistory() {
     }
   };
 
+  const deleteUrl = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this short URL?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setDeletingId(id);
+      setError("");
+
+      await api.delete(`/api/urls/${id}`);
+
+      setUrls((currentUrls) =>
+        currentUrls.filter((url) => url.id !== id)
+      );
+    } catch (err) {
+      console.error("Failed to delete URL:", err);
+
+      if (
+        err.response?.status === 401 ||
+        err.response?.status === 403
+      ) {
+        setError(
+          "You are not authorized to delete this URL."
+        );
+      } else if (err.response?.status === 404) {
+        setError(
+          "URL not found or it does not belong to you."
+        );
+      } else {
+        setError(
+          "Failed to delete the URL."
+        );
+      }
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="page page-enter">
         <div className="page-header">
           <div>
-            <h1 className="page-title">URL History</h1>
+            <h1 className="page-title">
+              URL History
+            </h1>
+
             <p className="page-subtitle">
               Manage and revisit every link you've created.
             </p>
@@ -109,7 +163,9 @@ export default function UrlHistory() {
 
       <div className="page-header">
         <div>
-          <h1 className="page-title">URL History</h1>
+          <h1 className="page-title">
+            URL History
+          </h1>
 
           <p className="page-subtitle">
             Manage and revisit every link you've created.
@@ -134,7 +190,9 @@ export default function UrlHistory() {
           </div>
 
           <select defaultValue="Active">
-            <option value="Active">Active</option>
+            <option value="Active">
+              Active
+            </option>
           </select>
 
         </div>
@@ -181,6 +239,7 @@ export default function UrlHistory() {
               <tbody>
 
                 {filteredUrls.map((url) => (
+
                   <tr key={url.id}>
 
                     <td>
@@ -202,7 +261,9 @@ export default function UrlHistory() {
                     </td>
 
                     <td>
-                      {formatCreatedDate(url.createdAt)}
+                      {formatCreatedDate(
+                        url.createdAt
+                      )}
                     </td>
 
                     <td className="bold">
@@ -256,6 +317,23 @@ export default function UrlHistory() {
 
                         <button
                           className="more-btn"
+                          title="Delete short URL"
+                          disabled={
+                            deletingId === url.id
+                          }
+                          onClick={() =>
+                            deleteUrl(url.id)
+                          }
+                        >
+                          {deletingId === url.id ? (
+                            <span>...</span>
+                          ) : (
+                            <Trash2 size={17} />
+                          )}
+                        </button>
+
+                        <button
+                          className="more-btn"
                           title="More options"
                         >
                           <MoreHorizontal size={17} />
@@ -265,6 +343,7 @@ export default function UrlHistory() {
                     </td>
 
                   </tr>
+
                 ))}
 
               </tbody>
