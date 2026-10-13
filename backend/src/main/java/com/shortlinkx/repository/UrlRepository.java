@@ -14,4 +14,6 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     boolean existsByShortCode(String shortCode);
 
     List<Url> findAllByUserOrderByCreatedAtDesc(User user);
+
+    Optional<Url> findByIdAndUser(Long id, User user);
 }

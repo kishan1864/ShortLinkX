@@ -40,7 +40,6 @@ public class UrlService {
             String userEmail
     ) {
 
-        // 1. Find the authenticated user
         User user = userRepository.findByEmail(
                 userEmail.trim().toLowerCase()
         ).orElseThrow(() ->
@@ -49,29 +48,23 @@ public class UrlService {
                 )
         );
 
-        // 2. Get the original URL
         String originalUrl =
                 request.getOriginalUrl().trim();
 
-        // 3. Generate a unique short code
         String shortCode =
                 shortCodeGenerator.generateUniqueCode();
 
-        // 4. Create URL and attach the owner
         Url url = new Url(
                 originalUrl,
                 shortCode,
                 user
         );
 
-        // 5. Save URL in PostgreSQL
         urlRepository.save(url);
 
-        // 6. Build the short URL
         String shortUrl =
                 baseUrl + "/" + shortCode;
 
-        // 7. Return response
         return new ShortUrlResponse(
                 originalUrl,
                 shortUrl,
@@ -83,7 +76,6 @@ public class UrlService {
             String userEmail
     ) {
 
-        // 1. Find authenticated user
         User user = userRepository.findByEmail(
                 userEmail.trim().toLowerCase()
         ).orElseThrow(() ->
@@ -92,11 +84,9 @@ public class UrlService {
                 )
         );
 
-        // 2. Find only this user's URLs
         List<Url> urls =
                 urlRepository.findAllByUserOrderByCreatedAtDesc(user);
 
-        // 3. Convert entities to DTOs
         return urls.stream()
                 .map(url -> new UrlHistoryResponse(
                         url.getId(),
@@ -106,6 +96,31 @@ public class UrlService {
                         url.getCreatedAt()
                 ))
                 .toList();
+    }
+
+    public void deleteUrl(
+            Long urlId,
+            String userEmail
+    ) {
+
+        User user = userRepository.findByEmail(
+                userEmail.trim().toLowerCase()
+        ).orElseThrow(() ->
+                new UserNotFoundException(
+                        "User not found with email: " + userEmail
+                )
+        );
+
+        Url url = urlRepository.findByIdAndUser(
+                urlId,
+                user
+        ).orElseThrow(() ->
+                new RuntimeException(
+                        "URL not found or you do not have permission to delete it"
+                )
+        );
+
+        urlRepository.delete(url);
     }
 
     public String getOriginalUrl(String shortCode) {

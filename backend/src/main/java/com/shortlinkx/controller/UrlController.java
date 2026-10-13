@@ -59,4 +59,21 @@ public class UrlController {
 
         return ResponseEntity.ok(history);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUrl(
+            @PathVariable Long id,
+            Authentication authentication
+    ) {
+
+        String userEmail =
+                authentication.getName();
+
+        urlService.deleteUrl(
+                id,
+                userEmail
+        );
+
+        return ResponseEntity.noContent().build();
+    }
 }
