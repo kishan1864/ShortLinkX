@@ -14,13 +14,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Service
 public class UrlService {
 
+    private static final Logger log =
+            LoggerFactory.getLogger(UrlService.class);
+
     private final UrlRepository urlRepository;
     private final UserRepository userRepository;
     private final ShortCodeGenerator shortCodeGenerator;
+
+    private final UrlCacheService urlCacheService;
 
     @Value("${app.base-url}")
     private String baseUrl;
@@ -28,11 +36,13 @@ public class UrlService {
     public UrlService(
             UrlRepository urlRepository,
             UserRepository userRepository,
-            ShortCodeGenerator shortCodeGenerator
+            ShortCodeGenerator shortCodeGenerator,
+            UrlCacheService urlCacheService
     ) {
         this.urlRepository = urlRepository;
         this.userRepository = userRepository;
         this.shortCodeGenerator = shortCodeGenerator;
+        this.urlCacheService = urlCacheService;
     }
 
     public ShortUrlResponse createShortUrl(
@@ -121,18 +131,58 @@ public class UrlService {
         );
 
         urlRepository.delete(url);
+
+        urlCacheService.evict(
+                url.getShortCode()
+        );
     }
 
     public String getOriginalUrl(String shortCode) {
 
-        Url url =
-                urlRepository.findByShortCode(shortCode)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Short URL not found"
-                                )
-                        );
 
-        return url.getOriginalUrl();
+
+        // 1. Check Redis first
+        String cachedUrl =
+                urlCacheService.getOriginalUrl(shortCode);
+
+        if (cachedUrl != null) {
+
+            log.info(
+                    "Redis cache HIT for shortCode={}",
+                    shortCode
+            );
+
+            return cachedUrl;
+        }
+
+        log.info(
+                "Redis cache MISS for shortCode={}",
+                shortCode
+        );
+
+        // 2. Redis miss -> query PostgreSQL
+        Url url = urlRepository.findByShortCode(shortCode)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Short URL not found"
+                        )
+                );
+
+        String originalUrl =
+                url.getOriginalUrl();
+
+        // 3. Store the result in Redis
+        urlCacheService.cacheOriginalUrl(
+                shortCode,
+                originalUrl
+        );
+
+        log.info(
+                "Redis cache SET for shortCode={}",
+                shortCode
+        );
+
+        // 4. Return original URL
+        return originalUrl;
     }
 }
