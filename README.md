@@ -1,670 +1,373 @@
-# 🚀 ShortLinkX — AI-Powered URL Shortening & Analytics Platform
+# ShortLinkX
 
 <div align="center">
+
+## AI-Powered URL Shortening and Link Management Platform
+
+Create short links, manage URL history, generate QR codes, and explore AI-assisted analytics from one authenticated workspace.
 
 [![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk&logoColor=white)](https://www.java.com/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.1-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-Vite-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Redis](https://img.shields.io/badge/Redis-Cache-DC382D?logo=redis&logoColor=white)](https://redis.io/)
 [![Spring Security](https://img.shields.io/badge/Spring%20Security-JWT-6DB33F?logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
-[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Docker](https://img.shields.io/badge/Docker-Backend-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Groq](https://img.shields.io/badge/Groq-AI-black)](https://groq.com/)
+[![Render](https://img.shields.io/badge/Deployed%20on-Render-46E3B7?logo=render&logoColor=111827)](https://render.com/)
 
-**A secure, full-stack URL shortening platform with JWT authentication, PostgreSQL persistence, Docker deployment, and AI-powered analytics insights.**
-
-### 🌐 Live Application
-
-**Frontend:** https://shortlinkx-frontend-gewj.onrender.com
-
-**Backend:** https://shortlinkx-backend-0nnu.onrender.com
-
-### 📦 Source Code
-
+**Live App:** https://shortlinkx-frontend-gewj.onrender.com  
+**Backend:** https://shortlinkx-backend-0nnu.onrender.com  
 **GitHub:** https://github.com/kishan1864/ShortLinkX
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [🎯 Project Overview](#-project-overview)
-- [💡 Why ShortLinkX?](#-why-shortlinkx)
-- [✨ Key Features](#-key-features)
-- [🏗️ System Architecture](#️-system-architecture)
-- [🔐 Authentication Architecture](#-authentication-architecture)
-- [🔗 URL Shortening Architecture](#-url-shortening-architecture)
-- [🧠 AI Analytics](#-ai-analytics)
-- [📡 API Documentation](#-api-documentation)
-- [🗃️ Database Design](#️-database-design)
-- [🧰 Technology Stack](#-technology-stack)
-- [📁 Project Structure](#-project-structure)
-- [🚀 Quick Start](#-quick-start)
-- [🔧 Configuration](#-configuration)
-- [🐳 Docker](#-docker)
-- [☁️ Deployment](#️-deployment)
-- [🧪 Testing & Validation](#-testing--validation)
-- [🐛 Troubleshooting](#-troubleshooting)
-- [🔒 Security & Engineering Notes](#-security--engineering-notes)
-- [📈 Scalability Roadmap](#-scalability-roadmap)
-- [🗺️ Planned Enhancements](#️-planned-enhancements)
-- [🎓 What This Project Demonstrates](#-what-this-project-demonstrates)
-- [👨‍💻 Author](#-author)
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Core Request Flows](#core-request-flows)
+- [Screenshots](#screenshots)
+- [API Overview](#api-overview)
+- [Data Model](#data-model)
+- [Redis Design](#redis-design)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Run Locally](#run-locally)
+- [Configuration](#configuration)
+- [Docker](#docker)
+- [Deployment](#deployment)
+- [Testing](#testing)
+- [Security Notes](#security-notes)
+- [Current Status](#current-status)
+- [Roadmap](#roadmap)
+- [Development Workflow](#development-workflow)
+- [Author](#author)
 
 ---
 
-# 🎯 Project Overview
+## Overview
 
-**ShortLinkX** is a full-stack URL shortening platform designed to demonstrate practical backend engineering, secure authentication, database persistence, frontend-backend integration, AI API integration, and cloud deployment.
+ShortLinkX is a full-stack URL shortening application built to demonstrate practical backend engineering and modern web development concepts.
 
-The project converts long URLs into short, shareable links and provides an authenticated dashboard experience around the shortened-link workflow.
+The application allows authenticated users to create and manage short links, view their URL history, securely delete owned URLs, generate QR codes from saved short links or arbitrary URLs, and explore analytics and AI-generated insights.
 
-The current implementation includes:
+The backend uses Java 21 and Spring Boot with Spring Security, JWT authentication, Spring Data JPA, PostgreSQL, and Redis caching. The frontend is built with React and Vite. The backend is containerized with Docker and the application is deployed on Render.
 
-- Secure user registration and login
-- JWT-based stateless authentication
-- BCrypt password hashing
-- Protected Spring Boot REST APIs
-- PostgreSQL persistence with JPA/Hibernate
-- 7-character Base62 short-code generation
-- Short-code collision checking
-- Public short-link redirection
-- React + Vite frontend
-- Groq-powered AI insights
-- Dockerized Spring Boot backend
-- Render cloud deployment
-- Environment-based configuration and secrets
-
-> **Current analytics scope:** the analytics screen currently uses seeded/demo metrics to demonstrate the AI integration. The AI analysis itself is generated dynamically from the supplied metrics. Real click-event collection and persistent analytics aggregation are planned enhancements.
+> Analytics and AI insight screens currently use demo/seeded metrics. Persistent real click-event analytics is a planned feature and is not claimed as complete yet.
 
 ---
 
-# 💡 Why ShortLinkX?
+## Features
 
-Long URLs are often difficult to share, remember, display, and manage.
+### Authentication and security
 
-ShortLinkX provides a simple workflow:
-
-```text
-Long URL
-   ↓
-Validate
-   ↓
-Generate compact Base62 code
-   ↓
-Store in PostgreSQL
-   ↓
-Return short URL
-   ↓
-User shares short URL
-   ↓
-Short URL redirects to original URL
-```
-
-The project also demonstrates how an application can evolve from a basic CRUD-style backend into a platform with authentication, AI integration, containerization, and cloud deployment.
-
----
-
-# ✨ Key Features
-
-## 🔐 1. Authentication & Authorization
-
-- User registration
-- User login
+- User registration and login
 - Stateless JWT authentication
 - BCrypt password hashing
 - Protected REST APIs
-- Authenticated user profile endpoint
+- Authenticated profile endpoint
 - Spring Security filter-chain integration
 - CORS configuration for local and deployed frontend
 
----
+### URL management
 
-## 🔗 2. URL Shortening
+- Create short links from HTTP/HTTPS URLs
+- 7-character Base62-style short-code generation
+- Short-code collision checking
+- Public short-link redirect
+- User URL history
+- Ownership-aware URL deletion
 
-- Accepts HTTP/HTTPS URLs
-- Validates URL input
-- Generates a 7-character Base62 short code
-- Checks for short-code collisions
-- Stores URL mappings in PostgreSQL
-- Returns a shareable short URL
-- Supports public short-link redirection
+### QR generator
 
-Example:
+- Generate QR codes from saved ShortLinkX URLs
+- Generate QR codes from any arbitrary URL
+- Live QR preview
+- Copy URL
+- Download QR as PNG
+- Arbitrary URLs used only for QR generation are not saved as shortened links
 
-```text
-Original:
-https://www.example.com/some/very/long/path
+### Redis caching
 
-Generated:
-http://localhost:8080/Ab12Xyz
-```
+- Short-code to original-URL caching
+- Cache-aside pattern
+- One-hour cache TTL
+- Cache eviction on URL deletion
+- PostgreSQL remains the source of truth
+- Local development verified with Memurai
+- Production configuration uses `REDIS_URL`
 
-Production redirect:
+### AI analytics
 
-```text
-https://shortlinkx-backend-0nnu.onrender.com/Ab12Xyz
-```
+- Groq-compatible AI integration
+- AI-generated observations
+- Trend interpretation
+- Recommendations based on supplied analytics metrics
 
----
+### Deployment
 
-## 🧠 3. AI-Powered Analytics Insights
-
-ShortLinkX integrates a Groq-compatible AI API through the Spring Boot backend.
-
-The backend sends analytics metrics such as:
-
-```json
-{
-  "totalClicks": 12842,
-  "uniqueVisitors": 8219,
-  "mobilePercentage": 61,
-  "desktopPercentage": 32,
-  "tabletPercentage": 7,
-  "topCountry": "India",
-  "topBrowser": "Chrome",
-  "growthPercentage": 18.2
-}
-```
-
-The model produces:
-
-- **Key observations**
-- **Trends**
-- **Recommendations**
-
-The metrics can be changed through the demo analytics endpoint, so different input data can produce different AI-generated insights.
+- React frontend on Render Static Site
+- Spring Boot backend on Render Web Service
+- PostgreSQL on Render
+- Redis/Key Value service on Render
+- Dockerized backend
+- Environment-based configuration
 
 ---
+## Screenshots
 
-## 🗄️ 4. PostgreSQL Persistence
+The screenshots below are stored in [`docs/screenshots/`](docs/screenshots/).
 
-Current production database tables include:
+## 🔐 Authentication
 
-```text
-users
-urls
-```
+Secure JWT authentication with a modern login interface.
 
-The backend uses:
+<p align="center">
+  <img src="docs/screenshots/login.jpeg" width="48%" alt="Login"/>
+  <img src="docs/screenshots/register.jpeg" width="48%" alt="Register"/>
+</p>
 
-- Spring Data JPA
-- Hibernate
-- PostgreSQL
-- Entity/repository separation
-- Unique constraints
-- Indexed short-code lookup
+### Dashboard
+<h2>📊 Dashboard</h2>
 
----
+<p align="center">
+  <img src="docs/screenshots/dashboard.jpeg" width="100%" alt="Dashboard"/>
+</p>
 
-## 🐳 5. Dockerized Backend
+### Create short URL
 
-The Spring Boot backend is containerized using a multi-stage Dockerfile:
+<p align="center">
+  <img src="docs/screenshots/create-url.jpeg" width="100%" alt="Create URL"/>
+</p>
 
-```text
-Maven + Java 21
-      ↓
-Build Spring Boot JAR
-      ↓
-Java 21 JRE image
-      ↓
-Run app.jar
-```
+### Short URL created successfully
+<h2>🔗 Create URL</h2>
 
----
+<p align="center">
+  <img src="docs/screenshots/4-create-url.jpeg" width="100%" alt="Create URL"/>
+</p>
 
-## ☁️ 6. Cloud Deployment
+### URL History
+<h2>📜 URL History</h2>
 
-The current application is deployed on Render:
+<p align="center">
+  <img src="docs/screenshots/history.jpeg" width="100%" alt="History"/>
+</p>
 
-```text
-GitHub
-   │
-   ├── frontend/
-   │       ↓
-   │   Render Static Site
-   │
-   └── backend/
-           ↓
-       Docker Web Service
-           │
-           ├── Render PostgreSQL
-           │
-           └── Groq API
-```
+### Analytics overview
+<h2>📈 Analytics</h2>
 
----
+<p align="center">
+  <img src="docs/screenshots/analytics.jpeg" width="100%" alt="Analytics"/>
+</p>
 
-# 🏗️ System Architecture
+### AI Insights
+<h2>🤖 AI Insights</h2>
 
-## 🏗️ High-Level Architecture
+<p align="center">
+  <img src="docs/screenshots/analytics1.jpeg" width="100%" alt="AI Insights"/>
+</p>
 
-```text
-                         ┌──────────────────────┐
-                         │        User          │
-                         │      Browser         │
-                         └──────────┬───────────┘
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │   React + Vite       │
-                         │     Frontend         │
-                         └──────────┬───────────┘
-                                    │
-                              REST / JSON
-                                    │
-                                    ▼
-                         ┌──────────────────────┐
-                         │    Spring Boot       │
-                         │      Backend         │
-                         └──────────┬───────────┘
-                                    │
-                 ┌──────────────────┼──────────────────┐
-                 │                  │                  │
-                 ▼                  ▼                  ▼
-          Spring Security       URL Service       User Service
-             + JWT                   │                  │
-                                    │                  │
-                 └──────────────────┼──────────────────┘
-                                    │
-                                    ▼
-                              ┌─────────────┐
-                              │ PostgreSQL  │
-                              └─────────────┘
-```
+### QR Generator
+<h2>📱 QR Generator</h2>
 
+<p align="center">
+  <img src="docs/screenshots/qr-generator.jpeg" width="100%" alt="QR Generator"/>
+</p>
+
+### Profile
+<h2>👤 Profile</h2>
+
+<p align="center">
+  <img src="docs/screenshots/profile.jpeg" width="100%" alt="Profile"/>
+</p>
 
 ---
 
-# 🔄 End-to-End Request Flow
+## Architecture
 
-## Normal protected API request
+### High-level architecture
 
 ```text
-Browser
-   ↓
+                              User Browser
+                                   |
+                                   v
+                         +---------------------+
+                         |    React + Vite     |
+                         |      Frontend       |
+                         +----------+----------+
+                                    |
+                               REST / JSON
+                                    |
+                                    v
+                         +---------------------+
+                         |     Spring Boot     |
+                         |       Backend       |
+                         +----------+----------+
+                                    |
+                 +------------------+------------------+
+                 |                  |                  |
+                 v                  v                  v
+        +----------------+ +----------------+ +----------------+
+        | Spring Security| | URL / User     | | AI Service     |
+        | JWT + BCrypt   | | Services       | | + Groq API     |
+        +----------------+ +-------+--------+ +----------------+
+                                    |
+                         +----------+----------+
+                         |                     |
+                         v                     v
+                  +-------------+       +-------------+
+                  |    Redis    |       | PostgreSQL  |
+                  |    Cache    |       | Source of   |
+                  |             |       | Truth       |
+                  +-------------+       +-------------+
+```
+
+### Deployment architecture
+
+```text
+GitHub Repository
+      |
+      +----------------------+
+      |                      |
+      v                      v
+Render Static Site      Render Web Service
+React frontend          Spring Boot backend
+                               |
+                 +-------------+-------------+
+                 |             |             |
+                 v             v             v
+            PostgreSQL      Redis/Key Value  Groq API
+```
+
+---
+
+## Core Request Flows
+
+### Authentication
+
+```text
+Register / Login
+      |
+      v
 React
-   ↓
-Axios
-   ↓
-Authorization: Bearer <JWT>
-   ↓
-Spring Boot
-   ↓
-JwtAuthenticationFilter
-   ↓
-Token validation
-   ↓
-SecurityContext
-   ↓
-Controller
-   ↓
-Service
-   ↓
-Repository
-   ↓
-PostgreSQL
-```
-
----
-
-# 🔐 Authentication Architecture
-
-ShortLinkX uses **stateless JWT authentication**.
-
-## Registration Flow
-
-```text
-Registration
-    │
-    ▼
-React
-    │
-    ▼
-POST /api/auth/register
-    │
-    ▼
+      |
+      v
 AuthController
-    │
-    ▼
+      |
+      v
 AuthService
-    │
-    ├── Validate request
-    ├── Check email
-    ├── BCrypt password hashing
-    │
-    ▼
-UserRepository
-    │
-    ▼
+      |
+      +--> validate request
+      +--> check user
+      +--> BCrypt password handling
+      |
+      v
 PostgreSQL
-```
-### Password lifecycle
 
-```text
-User enters password
-       ↓
-BCrypt PasswordEncoder
-       ↓
-Password hash
-       ↓
-PostgreSQL
+Login additionally:
+      |
+      +--> AuthenticationManager
+      +--> DaoAuthenticationProvider
+      +--> UserDetailsService
+      +--> JWT generation
 ```
 
-> BCrypt is a password hashing mechanism, not reversible encryption. The original password is not stored in the database.
-## Login Flow
-```text
-Login
-  │
-  ▼
-React
-  │
-  ▼
-POST /api/auth/login
-  │
-  ▼
-AuthenticationManager
-  │
-  ▼
-DaoAuthenticationProvider
-  │
-  ▼
-UserDetailsService
-  │
-  ▼
-PostgreSQL
-  │
-  ▼
-BCrypt password verification
-  │
-  ▼
-JwtService
-  │
-  ▼
-JWT access token
-  │
-  ▼
-React
-```
-
-For protected requests, the frontend sends:
-
-```http
-Authorization: Bearer <JWT>
-```
-
-The custom JWT filter validates the token, loads the user details, and places the authenticated user into Spring Security's `SecurityContext`.
-
----
-
-
-
-
-## Protected Request Flow
+For protected requests:
 
 ```text
 React
-   ↓
-Authorization: Bearer <JWT>
-   ↓
+  |
+  | Authorization: Bearer <JWT>
+  v
 JwtAuthenticationFilter
-   ↓
-Extract JWT
-   ↓
-Validate signature + expiration
-   ↓
-Extract username/email
-   ↓
-Load UserDetails
-   ↓
-Create Authentication object
-   ↓
-SecurityContextHolder
-   ↓
+  |
+  +--> validate signature
+  +--> validate expiration
+  +--> extract subject
+  +--> load user
+  |
+  v
+SecurityContext
+  |
+  v
 Protected Controller
 ```
 
----
-
-# 🔗 URL Shortening Architecture
-
-## Short-code generation
-
-ShortLinkX uses the Base62 character set:
+### URL creation
 
 ```text
-0123456789
-ABCDEFGHIJKLMNOPQRSTUVWXYZ
-abcdefghijklmnopqrstuvwxyz
+Long URL
+   |
+   v
+Validate input
+   |
+   v
+Generate short code
+   |
+   v
+Check code uniqueness
+   |
+   v
+Persist URL + owner in PostgreSQL
+   |
+   v
+Return short URL
 ```
 
-The generator creates a **7-character** code.
-
-Example:
+### Redirect with Redis
 
 ```text
-A7xK29p
+GET /{shortCode}
+        |
+        v
+   Spring Boot
+        |
+        v
+      Redis
+      /   \
+    HIT   MISS
+    |       |
+    |       v
+    |   PostgreSQL
+    |       |
+    |       v
+    |    Redis SET
+    |       |
+    +-------+
+        |
+        v
+  Original URL
+        |
+        v
+     Redirect
 ```
 
-Before saving:
+### Delete and cache invalidation
 
 ```text
-Generate code
-     ↓
-Check existsByShortCode(...)
-     ↓
-Already exists?
-   /      \
- Yes       No
-  ↓         ↓
-Generate   Save
-again      URL
+Delete owned URL
+       |
+       +----> PostgreSQL DELETE
+       |
+       +----> Redis EVICT
 ```
 
-This provides collision protection at the application level.
-
-
-
-## 🔗 URL Shortening Flow
-```text
-User
-  │
-  ▼
-React Frontend
-  │
-  │ POST /api/urls
-  ▼
-UrlController
-  │
-  ▼
-UrlService
-  │
-  ▼
-ShortCodeGenerator
-  │
-  ├── Generate 7-character Base62-style code
-  └── Check short-code uniqueness
-  │
-  ▼
-UrlRepository
-  │
-  ▼
-PostgreSQL
-  │
-  ▼
-Short URL response
-```
 ---
 
 
+## API Overview
 
-# 🔀 Redirect Flow
-
-When a user opens:
-
-```text
-https://shortlinkx-backend-0nnu.onrender.com/Ab12Xyz
-```
-
-the backend performs:
-
-```text
-Short Code
-    ↓
-Find URL by shortCode
-    ↓
-Found?
- /     \
-No      Yes
-↓        ↓
-404      Original URL
-         ↓
-       Redirect
-```
-
-The redirect endpoint is public because users need to open short links without authenticating.
-
----
-
-# 🧠 AI Analytics
-
-## AI Architecture
-```text
-UI 
-│
-▼
-API
-│
-│ POST /api/urls
-▼
-DEMO
-│
-▼
-AI
-│
-▼
-MODEL
-│
-│
-▼
-OUT
-│
-UI
-```
-
-
----
-
-## Analytics Data Endpoint
-
-```http
-GET /api/analytics/demo
-```
-
-Returns the current demo metrics.
-
----
-
-## Update Analytics Endpoint
-
-```http
-PUT /api/analytics/demo
-Content-Type: application/json
-Authorization: Bearer <JWT>
-```
-
-Example:
-
-```json
-{
-  "totalClicks": 8500,
-  "uniqueVisitors": 11200,
-  "mobilePercentage": 22,
-  "desktopPercentage": 78,
-  "tabletPercentage": 0,
-  "topCountry": "India",
-  "topBrowser": "Brave",
-  "growthPercentage": 27.5
-}
-```
-
-The backend validates the metrics and stores the current demo state in memory.
-
----
-
-## Generate AI Insights
-
-```http
-GET /api/analytics/ai-insights
-Authorization: Bearer <JWT>
-```
-
-Example response:
-
-```json
-{
-  "analytics": {
-    "totalClicks": 12842,
-    "uniqueVisitors": 8219,
-    "mobilePercentage": 61.0,
-    "desktopPercentage": 32.0,
-    "tabletPercentage": 7.0,
-    "topCountry": "India",
-    "topBrowser": "Chrome",
-    "growthPercentage": 18.2
-  },
-  "insights": "..."
-}
-```
-
-The AI prompt instructs the model to analyze only the supplied metrics and return concise observations, trends, and recommendations.
-
----
-
-# 📡 API Documentation
-
-## Authentication APIs
-
-### Register
+### Authentication
 
 ```http
 POST /api/auth/register
-Content-Type: application/json
-```
-
-Example:
-
-```json
-{
-  "name": "Kishan",
-  "email": "kishan@example.com",
-  "password": "StrongPassword123"
-}
-```
-
----
-
-### Login
-
-```http
 POST /api/auth/login
-Content-Type: application/json
 ```
-
-Example:
-
-```json
-{
-  "email": "kishan@example.com",
-  "password": "StrongPassword123"
-}
-```
-
-Returns a JWT access token.
-
----
-
-## User API
 
 ### Current user
 
@@ -672,12 +375,6 @@ Returns a JWT access token.
 GET /api/users/me
 Authorization: Bearer <JWT>
 ```
-
-Returns authenticated user profile information.
-
----
-
-## URL API
 
 ### Create short URL
 
@@ -687,7 +384,7 @@ Authorization: Bearer <JWT>
 Content-Type: application/json
 ```
 
-Request:
+Example request:
 
 ```json
 {
@@ -705,34 +402,20 @@ Example response:
 }
 ```
 
----
-
-### Redirect
+### Public redirect
 
 ```http
 GET /{shortCode}
 ```
 
-Public endpoint.
-
-Example:
-
-```http
-GET /Ab12Xyz
-```
-
----
-
-## AI Analytics APIs
-
-### Get demo analytics
+### Analytics
 
 ```http
 GET /api/analytics/demo
-Authorization: Bearer <JWT>
+GET /api/analytics/ai-insights
 ```
 
-### Update demo analytics
+Demo analytics update:
 
 ```http
 PUT /api/analytics/demo
@@ -740,34 +423,22 @@ Authorization: Bearer <JWT>
 Content-Type: application/json
 ```
 
-### Get AI insights
-
-```http
-GET /api/analytics/ai-insights
-Authorization: Bearer <JWT>
-```
+> QR generation is currently handled by the frontend and does not require a persistence API.
 
 ---
 
-# 🗃️ Database Design
+## Data Model
 
-Current PostgreSQL schema:
+Current PostgreSQL structure:
 
 ```text
 shortlinkx_db
-│
 └── public
-    │
     ├── users
-    │
     └── urls
 ```
 
----
-
-## `users`
-
-Current logical fields:
+### `users`
 
 | Field | Purpose |
 |---|---|
@@ -778,64 +449,113 @@ Current logical fields:
 | `role` | User role |
 | `created_at` | Account creation timestamp |
 
----
-
-## `urls`
-
-Current logical fields:
+### `urls`
 
 | Field | Purpose |
 |---|---|
 | `id` | Primary key |
 | `original_url` | Original long URL |
-| `short_code` | Unique generated code |
-| `created_at` | Creation timestamp |
-
-The `short_code` is uniquely constrained and used for redirect lookup.
-
----
-
-# 🧰 Technology Stack
-
-## Backend
-
-| Technology | Role |
-|---|---|
-| Java 21 | Application language |
-| Spring Boot 4.1.1 | Backend framework |
-| Spring Web | REST API |
-| Spring Security | Authentication & authorization |
-| JWT | Stateless authentication |
-| BCrypt | Password hashing |
-| Spring Data JPA | Persistence abstraction |
-| Hibernate | ORM |
-| Bean Validation | Request validation |
-| Maven | Build & dependency management |
-| PostgreSQL | Relational database |
-| Docker | Containerization |
-
-## Frontend
-
-| Technology | Role |
-|---|---|
-| React | UI |
-| Vite | Frontend build tooling |
-| React Router | Routing |
-| Axios | HTTP client |
-| Lucide React | UI icons |
-| Recharts | Charts |
-
-## AI & Cloud
-
-| Technology | Role |
-|---|---|
-| Groq API | AI-generated analytics insights |
-| Render | Frontend/backend/database hosting |
-| Docker | Backend deployment image |
+| `short_code` | Unique generated short code |
+| `created_at` | URL creation timestamp |
+| `user` | Owning user relationship |
 
 ---
 
-# 📁 Project Structure
+## Redis Design
+
+Redis is used as a cache, not as the permanent database.
+
+Example:
+
+```text
+Key:
+shorturl:Ab12Xyz
+
+Value:
+https://example.com
+
+TTL:
+1 hour
+```
+
+### Cache-aside behavior
+
+**First request:**
+
+```text
+Redis MISS
+   |
+   v
+PostgreSQL lookup
+   |
+   v
+Redis SET
+   |
+   v
+Redirect
+```
+
+**Repeated request:**
+
+```text
+Redis HIT
+   |
+   v
+Redirect
+```
+
+**Deletion:**
+
+```text
+PostgreSQL DELETE
+   |
+   v
+Redis EVICT
+```
+
+### Environment-specific configuration
+
+Local development:
+
+```text
+REDIS_URL not defined
+        |
+        v
+redis://localhost:6379
+```
+
+Render:
+
+```text
+REDIS_URL=<Render internal Redis/Key Value URL>
+```
+
+---
+
+## Technology Stack
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| Language | Java 21 | Backend language |
+| Backend | Spring Boot 4.1.1 | REST API and application layer |
+| Security | Spring Security | Authentication and authorization |
+| Authentication | JWT | Stateless API authentication |
+| Password hashing | BCrypt | Secure password storage |
+| Persistence | Spring Data JPA / Hibernate | Database access and ORM |
+| Database | PostgreSQL | Persistent data |
+| Cache | Redis | Short-link redirect caching |
+| Frontend | React + Vite | User interface |
+| HTTP client | Axios | API communication |
+| Routing | React Router | Frontend routing |
+| Charts | Recharts | Analytics visualization |
+| AI | Groq API | AI-generated insights |
+| Build | Maven | Backend dependency/build management |
+| Container | Docker | Backend packaging/deployment |
+| Hosting | Render | Cloud hosting |
+
+---
+
+## Project Structure
 
 ```text
 ShortLinkX/
@@ -854,13 +574,15 @@ ShortLinkX/
 │   │   │   │   ├── repository/
 │   │   │   │   ├── security/
 │   │   │   │   ├── service/
+│   │   │   │   │   ├── UrlService.java
+│   │   │   │   │   └── UrlCacheService.java
 │   │   │   │   ├── user/
 │   │   │   │   └── util/
 │   │   │   └── resources/
 │   │   │       └── application.properties
 │   │   ├── test/
-│   │   ├── Dockerfile
-│   │   └── pom.xml
+│   │   └── Dockerfile
+│   └── pom.xml
 │
 ├── frontend/
 │   ├── src/
@@ -872,6 +594,19 @@ ShortLinkX/
 │   ├── package.json
 │   └── vite.config.js
 │
+├── docs/
+│   └── screenshots/
+│       ├── login.jpeg
+│       ├── register.jpeg
+│       ├── dashboard.jpeg
+│       ├── create-url.jpeg
+│       ├── create-url-success.jpeg
+│       ├── history.jpeg
+│       ├── analytics-overview.jpeg
+│       ├── ai-insights.jpeg
+│       ├── qr-generator.jpeg
+│       └── profile.jpeg
+│
 ├── .gitignore
 ├── README.md
 └── ...
@@ -879,47 +614,28 @@ ShortLinkX/
 
 ---
 
-# 🚀 Quick Start
+## Run Locally
 
-## Prerequisites
+### Prerequisites
 
-Install:
+- Java 21
+- Maven, or the included Maven Wrapper
+- PostgreSQL
+- Node.js and npm
+- Git
+- Redis-compatible server; Memurai is suitable for Windows development
 
-```text
-Java 21
-Maven
-PostgreSQL
-Node.js
-npm
-Git
-```
-
-Docker is required only for the containerized deployment workflow.
-
----
-
-# 💻 Running the Backend Locally
-
-Navigate to:
+### Backend
 
 ```bash
 cd backend
+./mvnw spring-boot:run
 ```
 
-Set environment variables.
-
-### PowerShell example
+Windows:
 
 ```powershell
-$env:DB_PASSWORD="your_local_postgres_password"
-$env:JWT_SECRET="your_long_jwt_secret"
-$env:GROQ_API_KEY="your_groq_api_key"
-```
-
-Run:
-
-```bash
-mvn spring-boot:run
+.\mvnw.cmd spring-boot:run
 ```
 
 Backend:
@@ -928,47 +644,41 @@ Backend:
 http://localhost:8080
 ```
 
----
-
-# ⚛️ Running the Frontend Locally
-
-Navigate to:
+### Frontend
 
 ```bash
 cd frontend
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Start Vite:
-
-```bash
 npm run dev
 ```
 
-Frontend:
+Frontend normally starts at:
 
 ```text
 http://localhost:5173
 ```
 
-The local frontend calls the local backend through:
+If that port is already occupied, Vite may use another port such as `5174`.
+
+### Local Redis
+
+With Memurai running:
+
+```cmd
+memurai-cli.exe ping
+```
+
+Expected:
 
 ```text
-VITE_API_URL=http://localhost:8080
+PONG
 ```
 
 ---
 
-# 🔧 Configuration
+## Configuration
 
-## Backend `application.properties`
-
-The application is configured through environment variables:
+The backend uses environment variables for external services and secrets.
 
 ```properties
 spring.application.name=shortlinkx
@@ -987,18 +697,14 @@ server.port=${PORT:8080}
 app.jwt.secret=${JWT_SECRET}
 app.jwt.expiration=86400000
 
-server.error.include-message=always
-
 app.groq.api-key=${GROQ_API_KEY}
 app.groq.model=${GROQ_MODEL:openai/gpt-oss-20b}
 app.groq.endpoint=${GROQ_ENDPOINT:https://api.groq.com/openai/v1/chat/completions}
+
+spring.data.redis.url=${REDIS_URL:redis://localhost:6379}
 ```
 
----
-
-## 🔑 Environment Variables
-
-### Backend
+### Backend environment variables
 
 ```text
 DB_HOST
@@ -1012,6 +718,8 @@ JWT_SECRET
 GROQ_API_KEY
 GROQ_MODEL
 GROQ_ENDPOINT
+
+REDIS_URL
 ```
 
 ### Frontend
@@ -1020,629 +728,277 @@ GROQ_ENDPOINT
 VITE_API_URL
 ```
 
-### Security rule
+### Secret rule
 
-Never commit actual values for:
+Never commit real values for:
 
 ```text
 DB_PASSWORD
 JWT_SECRET
 GROQ_API_KEY
+REDIS_URL
 ```
 
-Use deployment environment variables or local environment configuration.
+Use local environment configuration and Render environment variables.
 
 ---
 
-# 🐳 Docker
+## Docker
 
-The backend includes:
+The backend is containerized with a multi-stage Docker build:
 
 ```text
-backend/Dockerfile
+Maven + Java 21
+      |
+      v
+Build Spring Boot JAR
+      |
+      v
+Java 21 JRE image
+      |
+      v
+Run app.jar
 ```
 
-The Dockerfile uses a multi-stage build:
-
-```dockerfile
-FROM maven:3.9-eclipse-temurin-21 AS build
-
-WORKDIR /app
-
-COPY pom.xml .
-COPY src ./src
-
-RUN mvn clean package -DskipTests
-
-FROM eclipse-temurin:21-jre
-
-WORKDIR /app
-
-COPY --from=build /app/target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
-### Build locally
-
-From the `backend/` directory:
+Build:
 
 ```bash
+cd backend
 docker build -t shortlinkx-backend .
 ```
 
-### Run locally
+Run:
 
 ```bash
 docker run -p 8080:8080 shortlinkx-backend
 ```
 
-For a real deployment, database and secret configuration should be supplied through environment variables.
+Docker is used for backend packaging/deployment. Docker Compose is not part of the current stack.
 
 ---
 
-# ☁️ Deployment
+## Deployment
 
-ShortLinkX is currently deployed on Render.
-
-## Production architecture
-
-```text
-GitHub Repository
-        │
-        ├───────────────┐
-        │               │
-        ▼               ▼
-Render Static       Render Web
-Site                Service
-Frontend            Backend
-                        │
-                        ├── PostgreSQL
-                        │
-                        └── Groq API
-```
+ShortLinkX is deployed on Render.
 
 ### Frontend
 
 ```text
-Service Type: Static Site
+Service: Render Static Site
 Root Directory: frontend
 Build Command: npm ci && npm run build
 Publish Directory: dist
 ```
 
-Production API variable:
-
-```text
-VITE_API_URL=https://shortlinkx-backend-0nnu.onrender.com
-```
-
 ### Backend
 
 ```text
-Service Type: Web Service
+Service: Render Web Service
 Runtime: Docker
 Root Directory: backend
-Dockerfile: backend/Dockerfile
 ```
 
-Database and AI credentials are provided through Render environment variables.
+### Production services
+
+```text
+Render Frontend
+       |
+       v
+Render Backend
+   |      |      |
+   v      v      v
+Postgres Redis  Groq
+```
+
+The backend receives production connection information through Render environment variables. The Redis connection should use the internal URL of the Redis/Key Value service.
+
+### Live URLs
+
+- Frontend: https://shortlinkx-frontend-gewj.onrender.com
+- Backend: https://shortlinkx-backend-0nnu.onrender.com
+- GitHub: https://github.com/kishan1864/ShortLinkX
 
 ---
 
-# 🔗 Production URLs
+## Testing
 
-### Frontend
+### Authentication
 
-https://shortlinkx-frontend-gewj.onrender.com
+- Register a user
+- Login with valid credentials
+- Verify invalid credentials are rejected
+- Verify protected endpoints require authentication
 
-### Backend
+### URL management
 
-https://shortlinkx-backend-0nnu.onrender.com
+- Create valid HTTP and HTTPS URLs
+- Reject blank or malformed URLs
+- Verify unique short-code generation
+- Open a public short URL
+- Verify URL history
+- Delete an owned URL
+- Verify users cannot delete another user's URL
 
-### GitHub
+### QR generator
 
-https://github.com/kishan1864/ShortLinkX
+- Select a saved short link
+- Generate the QR code
+- Copy the URL
+- Download the PNG
+- Enter an arbitrary URL
+- Generate its QR code without creating a saved short link
+
+### Redis
+
+A successful cache-aside test looks like:
+
+```text
+Request 1 -> MISS -> PostgreSQL -> SET
+Request 2 -> HIT
+```
+
+Also verify:
+
+```text
+TTL is present
+Delete URL -> Redis key is evicted
+```
+
+### AI analytics
+
+- Read the current demo metrics
+- Request AI insights
+- Update demo metrics
+- Request AI insights again
+- Verify that the interpretation changes with the supplied metrics
 
 ---
 
-# 🧪 Testing & Validation
+## Security Notes
 
-## Authentication tests
-
-```text
-Register
-  ↓
-Login
-  ↓
-Receive JWT
-  ↓
-Call protected endpoint
-```
-
-Protected requests should contain:
-
-```http
-Authorization: Bearer <JWT>
-```
-
----
-
-## URL tests
-
-Test:
-
-```text
-Valid HTTP URL
-Valid HTTPS URL
-Blank URL
-Malformed URL
-Duplicate short-code collision scenario
-Non-existent short-code redirect
-```
-
----
-
-## AI analytics tests
-
-1. Read current demo metrics.
-2. Update the values.
-3. Request AI insights.
-4. Compare the result with the new inputs.
-
-Example:
-
-```text
-Mobile: 61%
-Desktop: 32%
-Tablet: 7%
-```
-
-Change to:
-
-```text
-Mobile: 20%
-Desktop: 75%
-Tablet: 5%
-```
-
-Then request AI insights again to observe how the generated interpretation changes.
-
----
-
-# 🧪 HTTP Status Codes Used in the Project
-
-Typical API outcomes include:
-
-```text
-200 OK
-    Successful request
-
-201 Created
-    Resource successfully created
-
-400 Bad Request
-    Invalid request or validation failure
-
-401 Unauthorized
-    Authentication is missing or invalid
-
-403 Forbidden
-    Access is not permitted
-
-404 Not Found
-    Requested resource does not exist
-
-409 Conflict
-    Resource conflicts with existing state
-
-500 Internal Server Error
-    Unexpected server-side failure
-```
-
-### Example
-
-A protected endpoint opened directly in a browser without the JWT may return:
-
-```text
-403 Forbidden
-```
-
-because the browser request does not include the application's Bearer token.
-
----
-
-# 🐛 Troubleshooting
-
-## 1. React shows a blank page
-
-Check:
-
-```text
-frontend/index.html
-```
-
-The Vite entry point should reference:
-
-```text
-/src/main.jsx
-```
-
-not the backend source tree.
-
----
-
-## 2. CORS error
-
-The backend CORS configuration must allow the actual frontend origin.
-
-Current production frontend:
-
-```text
-https://shortlinkx-frontend-gewj.onrender.com
-```
-
-Local frontend:
-
-```text
-http://localhost:5173
-```
-
----
-
-## 3. Login succeeds but user is not stored correctly
-
-Verify the frontend reads:
-
-```text
-accessToken
-```
-
-from the backend response rather than a different property name.
-
----
-
-## 4. Render backend connects to localhost
-
-A cloud deployment must never use:
-
-```text
-jdbc:postgresql://localhost:5432/...
-```
-
-for the production database.
-
-Use:
-
-```properties
-spring.datasource.url=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-```
-
----
-
-## 5. JWT secret startup failure
-
-The application validates the JWT signing secret length.
-
-Provide a sufficiently long secret through:
-
-```text
-JWT_SECRET
-```
-
-and never commit the real secret to GitHub.
-
----
-
-## 6. AI endpoint returns `401` / `403`
-
-Check:
-
-```text
-Authorization: Bearer <JWT>
-```
-
-The AI analytics endpoint is protected by Spring Security.
-
----
-
-## 7. Production database looks empty
-
-The Render PostgreSQL database is separate from the local PostgreSQL database.
-
-```text
-Local PostgreSQL
-    ≠
-Render PostgreSQL
-```
-
-A user registered locally does not automatically exist in the production database.
-
----
-
-# 🔒 Security & Engineering Notes
-
-## Password Security
-
-Passwords are hashed using BCrypt before persistence:
+### Password security
 
 ```text
 Plain password
-      ↓
-BCrypt
-      ↓
+      |
+      v
+    BCrypt
+      |
+      v
 Password hash
-      ↓
-PostgreSQL
+      |
+      v
+ PostgreSQL
 ```
+
+### JWT security
+
+The backend validates token signature, subject, and expiration before creating the authenticated security context.
+
+### URL ownership
+
+URL deletion is performed using the authenticated user context so users cannot intentionally delete links owned by other users.
+
+### Cache consistency
+
+PostgreSQL is the durable source of truth. Redis is a cache. URL deletion evicts the corresponding cache key.
+
+### Secret management
+
+Credentials and secrets are kept out of source control and supplied through environment variables.
 
 ---
 
-## JWT Security
+## Current Status
 
-JWTs are used for stateless API authentication.
-
-The backend validates:
-
-- Token signature
-- Token subject
-- Token expiration
-
-The JWT does not contain the user's password.
-
----
-
-## Secret Management
-
-Sensitive values are stored through environment variables:
-
-```text
-JWT_SECRET
-GROQ_API_KEY
-DB_PASSWORD
-```
-
-They are intentionally excluded from Git tracking through `.gitignore` rules.
-
----
-
-## Input Validation
-
-The URL creation request validates that the supplied URL is non-blank and follows an HTTP/HTTPS URL pattern before persistence.
-
----
-
-## CORS
-
-Only explicitly configured frontend origins are allowed.
-
-Current origins include:
-
-```text
-http://localhost:5173
-https://shortlinkx-frontend-gewj.onrender.com
-```
+| Capability |  Status  |
+|---|:--------:|
+| React frontend | Complete |
+| Spring Boot backend | Complete |
+| JWT authentication | Complete |
+| BCrypt password hashing | Complete |
+| PostgreSQL persistence | Complete |
+| URL shortening | Complete |
+| Short-code collision checking | Complete |
+| Public redirect | Complete |
+| User URL history | Complete |
+| Secure URL deletion | Complete |
+| QR generator | Complete |
+| QR from arbitrary URL | Complete |
+| AI insights | Complete |
+| Dockerized backend | Complete |
+| Render deployment | Complete |
+| Redis cache - local | Complete |
+| Redis cache - production rollout | Complete |
+| Persistent real click analytics | Planned  |
+| Real dashboard metrics from click events | Planned  |
+| Rate limiter |  Future  |
+| Swagger / OpenAPI |  Future  |
+| Docker Compose |  Future  |
+| API Gateway / microservices |  Future  |
+| Kafka |  Future  |
+| Load balancing |  Future  |
+| Monitoring / distributed tracing |  Future  |
+| Kubernetes |  Future  |
 
 ---
+| Feature | Status |
+|---------|:------:|
+| JWT Authentication | ✅ |
+| PostgreSQL | ✅ |
+| URL History | ✅ |
+| QR Generator | ✅ |
+| Redis Cache | ✅ |
+| AI Insights | ✅ |
+| Click Counter | 🚧 |
+| Dashboard from DB | 🚧 |
+| Real Analytics | 🚧 |
 
-# 📈 Scalability Roadmap
+## Roadmap
 
-The current architecture is intentionally modular so that the application can grow without rewriting the core API contract.
+### Phase 1 - Core platform
 
-## Current
+- Authentication
+- JWT
+- PostgreSQL
+- URL shortening
+- AI integration
+- Cloud deployment
 
-```text
-React
- ↓
-Spring Boot
- ↓
-PostgreSQL
- ↓
-Groq
-```
+### Phase 2 - Product features
 
-## Planned scalable architecture
+- User URL history
+- Secure URL deletion
+- QR generation
+- Dashboard UI
+- Analytics UI
 
-```text
-                    ┌───────────────┐
-                    │ React Client  │
-                    └───────┬───────┘
-                            ↓
-                    ┌───────────────┐
-                    │ Load Balancer │
-                    └───────┬───────┘
-                            ↓
-                ┌──────────────────────┐
-                │ Spring Boot Instances│
-                │  A     B     C       │
-                └───────┬──────────────┘
-                        │
-             ┌──────────┴──────────┐
-             ↓                     ↓
-       Redis Cache          PostgreSQL
-             │
-             ↓
-      Rate Limiting
-             │
-             ↓
-      Async Analytics
-             │
-             ↓
-          Groq AI
-```
-
-Planned system-design topics include:
+### Phase 3 - Performance and real analytics
 
 - Redis caching
-- Redis-based rate limiting
-- Asynchronous analytics processing
-- Message queues
-- Load balancing
-- Database indexing and optimization
-- Horizontal scaling
-- Observability and monitoring
+- Real click counter
+- Persistent click events
+- Real analytics derived from stored click events
+- Dashboard metrics backed by real data
 
----
+### Future system design
 
-# 🗺️ Planned Enhancements
-
-The following features are **not claimed as fully implemented yet**:
-
-### 🔗 URL Management
-
-- URL history
-- Custom short URLs
-- URL ownership
-- URL expiration
-
-### 📊 Real Analytics
-
-- Click-event tracking
-- Unique visitor calculation
-- Device detection
-- Browser detection
-- Location analytics
-- Referrer analytics
-- Historical analytics aggregation
-
-### 📱 Utility Features
-
-- QR code generation
-- Shareable QR links
-
-### ⚡ Performance
-
-- Redis caching
-- Redis rate limiting
-- Request throttling
-
-### 🧵 Distributed Processing
-
-- Asynchronous analytics pipeline
-- Message queues
-- Background workers
-
-### 📚 Developer Experience
-
+- Rate limiting
 - Swagger / OpenAPI
-- More automated tests
-- CI/CD pipeline
-- Production monitoring
-- Structured logging
+- Docker Compose
+- API Gateway
+- Microservices
+- Kafka and asynchronous processing
+- Load balancing
+- Monitoring
+- Distributed tracing
+- Kubernetes
+
+> Future items are intentionally not presented as implemented features.
 
 ---
 
-# 🎓 What This Project Demonstrates
-
-ShortLinkX is intended to demonstrate practical knowledge of:
-
-```text
-Java 21
-   +
-Spring Boot
-   +
-Spring Security
-   +
-JWT
-   +
-REST API Design
-   +
-JPA / Hibernate
-   +
-PostgreSQL
-   +
-React
-   +
-Axios
-   +
-Groq API Integration
-   +
-Docker
-   +
-Cloud Deployment
-   +
-Environment-based Configuration
-   +
-Real-world Debugging
-```
-
-The project also demonstrates the development lifecycle:
-
-```text
-Idea
- ↓
-Architecture
- ↓
-Implementation
- ↓
-Integration
- ↓
-Debugging
- ↓
-Git / GitHub
- ↓
-Docker
- ↓
-Cloud Deployment
- ↓
-Production Testing
-```
-
----
-
-# 🧩 Development & Debugging Highlights
-
-Some of the most useful engineering problems solved during development were:
-
-### Frontend entry-point issue
-
-An incorrect Vite entry path caused a blank application.
-
-**Resolution:** corrected the frontend entry-point reference.
-
-### CORS preflight issue
-
-The browser's `OPTIONS` request was initially blocked by the backend security configuration.
-
-**Resolution:** configured CORS and explicitly allowed preflight requests.
-
-### JWT response mismatch
-
-The backend returned:
-
-```json
-{
-  "accessToken": "..."
-}
-```
-
-while the frontend was reading a different property.
-
-**Resolution:** synchronized the frontend authentication context with the backend response contract.
-
-### Production database connection
-
-The first cloud deployment attempted:
-
-```text
-localhost:5432
-```
-
-which pointed to the container itself instead of Render PostgreSQL.
-
-**Resolution:** moved production database configuration to environment variables.
-
-### Groq integration
-
-The AI service had to serialize metrics into a request payload, call the external AI API, parse the response, and return a clean application-level result.
-
----
-
-# 🔄 Development Workflow with Git
-
-Typical workflow used for ShortLinkX:
+## Development Workflow
 
 ```bash
 git status
@@ -1654,50 +1010,22 @@ git push origin main
 Example:
 
 ```bash
-git add backend/Dockerfile
-git commit -m "chore: add Dockerfile for backend deployment"
+git add README.md docs/screenshots
+git commit -m "docs: upgrade project README"
 git push origin main
 ```
 
-The repository is maintained as a single monorepo containing both frontend and backend code.
-
 ---
 
-# 📌 Project Status
-
-| Area | Status |
-|---|:---:|
-| React frontend | ✅ |
-| Spring Boot backend | ✅ |
-| JWT authentication | ✅ |
-| BCrypt password hashing | ✅ |
-| PostgreSQL persistence | ✅ |
-| URL shortening | ✅ |
-| Short-code collision checking | ✅ |
-| Public redirect | ✅ |
-| Groq AI integration | ✅ |
-| Demo analytics | ✅ |
-| Docker backend | ✅ |
-| Render deployment | ✅ |
-| Real click analytics | 🔄 Planned |
-| Redis caching | 🔄 Planned |
-| Rate limiting | 🔄 Planned |
-| QR generation | 🔄 Planned |
-| Swagger/OpenAPI | 🔄 Planned |
-
----
-
-# 👨‍💻 Author
+## Author
 
 <div align="center">
 
 ### Kishan Sahu
 
-[![GitHub](https://img.shields.io/badge/GitHub-kishan1864-181717?logo=github)](https://github.com/kishan1864)
-
-**Project:** [ShortLinkX](https://github.com/kishan1864/ShortLinkX)
-
-**Live Demo:** [Open ShortLinkX](https://shortlinkx-frontend-gewj.onrender.com)
+GitHub: https://github.com/kishan1864  
+Project: https://github.com/kishan1864/ShortLinkX  
+Live Demo: https://shortlinkx-frontend-gewj.onrender.com
 
 </div>
 
@@ -1705,10 +1033,10 @@ The repository is maintained as a single monorepo containing both frontend and b
 
 <div align="center">
 
-## ⭐ ShortLinkX
+### ShortLinkX
 
 **Shorter links. Smarter insights.**
 
-Built as a practical full-stack engineering project with **Spring Boot, React, PostgreSQL, JWT, Docker, and AI integration.**
+Built with Java, Spring Boot, React, PostgreSQL, JWT, Redis, Docker, and AI integration.
 
 </div>
